@@ -12,23 +12,50 @@ import { ListUsersComponent } from './admin/users-config/list-users/list-users.c
 import { CreateSecurityQuestionComponent } from './admin/security-questions-config/create-security-question/create-security-question.component';
 import { ListSecurityQuestionsComponent } from './admin/security-questions-config/list-security-questions/list-security-questions.component';
 
+import { AuthLoginGuard } from './Services/auth/auth-guard-login.service';
+import { AuthAdminGuard } from './Services/auth/auth-guard-admin.service';
+
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, canActivate: [AuthLoginGuard] },
   { path: 'about', component: AboutComponent },
   {
-    path: 'admin/users',
-    component: UsersConfigComponent,
+    path: 'admin',
+    component: AdminComponent,
     children: [
-      { path: 'create-user', component: CreateUserComponent },
-      { path: 'list-users', component: ListUsersComponent },
-    ],
-  },
-  {
-    path: 'admin/security',
-    component: SecurityQuestionsConfigComponent,
-    children: [
-      { path: 'create-security', component: CreateSecurityQuestionComponent },
-      { path: 'list-security', component: ListSecurityQuestionsComponent },
+      {
+        path: 'users',
+        component: UsersConfigComponent,
+        canActivate: [AuthAdminGuard],
+        children: [
+          {
+            path: 'create-user',
+            component: CreateUserComponent,
+            canActivate: [AuthAdminGuard],
+          },
+          {
+            path: 'list-users',
+            component: ListUsersComponent,
+            canActivate: [AuthAdminGuard],
+          },
+        ],
+      },
+      {
+        path: 'security',
+        component: SecurityQuestionsConfigComponent,
+        canActivate: [AuthAdminGuard],
+        children: [
+          {
+            path: 'create-security',
+            component: CreateSecurityQuestionComponent,
+            canActivate: [AuthAdminGuard],
+          },
+          {
+            path: 'list-security',
+            component: ListSecurityQuestionsComponent,
+            canActivate: [AuthAdminGuard],
+          },
+        ],
+      },
     ],
   },
   { path: '**', pathMatch: 'full', component: NotFoundComponent },

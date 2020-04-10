@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "bcrs-two"
+  "defaultProject": "bcrs-two",
+  "cli": {
+    "analytics": false
+  }
 }
