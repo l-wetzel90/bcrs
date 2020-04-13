@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
 
 import { AuthService } from '../../../Services/auth/auth.service';
 import { UserService } from '../../../Services/user.service';
 import { User } from '../../../Models/user.model';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-list-users',
@@ -16,7 +15,7 @@ export class ListUsersComponent implements OnInit {
   title = 'Registered Users';
   users: User[] = [];
   isLoading = true;
-  displayedColumns = ['username', 'firstName', 'lastName', 'email', 'role', 'actions'];
+  displayedColumns = ['username', 'firstName', 'lastName', 'email', 'role', 'action'];
   dataSource: any;
 
   // initialize our UserServie methods on component construction
@@ -31,7 +30,7 @@ export class ListUsersComponent implements OnInit {
     this.userService.getUsers().subscribe(
       (data) => {
         this.users = data;
-        this.dataSource = new TableDataSource(this.users);
+        this.dataSource = new MatTableDataSource(data);
       },
       (error) => console.log(error),
       () => (this.isLoading = false)
@@ -52,16 +51,16 @@ export class ListUsersComponent implements OnInit {
 /**
  * Data source to provide what data should be rendered in the table
  */
-export class TableDataSource extends DataSource<any> {
-  constructor(private data: any) {
-    super();
-  }
-  /**
-   * Connect function called by the table to retrieve one stream containing the data to render
-   */
-  connect(): Observable<User[]> {
-    return of(this.data);
-  }
+// export class TableDataSource extends DataSource<any> {
+//   constructor(private data: any) {
+//     super();
+//   }
+//   /**
+//    * Connect function called by the table to retrieve one stream containing the data to render
+//    */
+//   connect(): Observable<User[]> {
+//     return of(this.data);
+//   }
 
-  disconnect() {}
-}
+//   disconnect() {}
+// }

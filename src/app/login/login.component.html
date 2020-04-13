@@ -1,0 +1,35 @@
+<div class="container">
+  <app-page-header [title]="title"></app-page-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12 col-centered">
+      <div class="form-wrap">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <div class="input-wrap">
+            <mat-form-field>
+              <span matPrefix>
+                <i class="prefix fa fa-envelope"></i>
+              </span>
+              <input matInput type="text" name="username" [formControl]="username" />
+              <mat-error *ngIf="username.hasError('required')"> Username is <strong>required</strong> </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="input-wrap">
+            <mat-form-field>
+              <span matPrefix>
+                <i class="prefix fa fa-key"></i>
+              </span>
+              <input matInput type="password" name="password" [formControl]="password" />
+              <mat-error *ngIf="password.hasError('minLength')">
+                Password must be at least 6 characters long
+              </mat-error>
+              <mat-error *ngIf="password.hasError('required')"> Password is <strong>required</strong> </mat-error>
+            </mat-form-field>
+          </div>
+          <button mat-raised-button type="submit" [disabled]="!loginForm.valid" color="accent">
+            <i class="fas fa-paper-plane"></i> Login
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { SharedModule } from './shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -46,8 +46,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
-import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { SecurityQuestionsConfigComponent } from './admin/security-questions-config/security-questions-config.component';
 import { UsersConfigComponent } from './admin/users-config/users-config.component';
@@ -64,14 +64,18 @@ import { AuthService } from './Services/auth/auth.service';
 import { UserService } from './Services/user.service';
 import { AuthLoginGuard } from './Services/auth/auth-guard-login.service';
 import { AuthAdminGuard } from './Services/auth/auth-guard-admin.service';
+import { LogoutComponent } from './logout/logout.component';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthInterceptor } from './Services/auth/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AboutComponent,
-    HeaderComponent,
     FooterComponent,
+    LoginComponent,
+    LogoutComponent,
     AdminComponent,
     SecurityQuestionsConfigComponent,
     UsersConfigComponent,
@@ -131,7 +135,19 @@ import { AuthAdminGuard } from './Services/auth/auth-guard-admin.service';
     MatProgressSpinnerModule,
     // FlexLayoutModule
   ],
-  providers: [QuestionService, AuthService, UserService, AuthLoginGuard, AuthAdminGuard],
+  providers: [
+    QuestionService,
+    AuthService,
+    UserService,
+    AuthLoginGuard,
+    AuthAdminGuard,
+    CookieService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })

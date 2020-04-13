@@ -1,0 +1,24 @@
+.page-header {
+  margin: 30px;
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+  color: purple;
+}
+
+.prefix {
+  color: grey;
+  margin: 0 5px;
+}
+
+.form-wrap {
+  text-align: center;
+}
+
+.form-wrap .input-wrap {
+  margin: 20px 0;
+}
+
+.form-wrap .mat-form-field {
+  width: 100%;
+}

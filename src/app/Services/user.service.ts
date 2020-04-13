@@ -20,6 +20,11 @@ export class UserService {
     return this.http.post<any>(`${apiUrl}/auth/login`, credentials);
   }
 
+  // Get currently logged in user
+  me(): Observable<User> {
+    return this.http.get<User>(`${apiUrl}/auth/me`);
+  }
+
   // Get all users
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${apiUrl}/users`);

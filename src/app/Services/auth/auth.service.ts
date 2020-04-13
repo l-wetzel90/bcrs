@@ -6,6 +6,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { CookieService } from 'ngx-cookie-service';
 
 import { UserService } from '../user.service';
 import { User } from '../../Models/user.model';
@@ -21,10 +22,10 @@ export class AuthService {
 
   currentUser: User = new User();
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private cookie: CookieService) {
     const token = localStorage.getItem('token');
     if (token) {
-      const decodedUser = this.decodeUserFromToken(token);
+      const decodedUser = this.jwtHelper.decodeToken(token);
       this.setCurrentUser(decodedUser);
     }
   }
@@ -33,10 +34,9 @@ export class AuthService {
     return this.userService.login(usernameAndPassword).pipe(
       map((res) => {
         localStorage.setItem('token', res.token);
-        const decodedUser = this.decodeUserFromToken(res.token);
+        this.cookie.set('token ', res.token, 1);
+        const decodedUser = this.jwtHelper.decodeToken(res.token);
         this.setCurrentUser(decodedUser);
-        // console log to see what is in the decodedUser
-        console.log(decodedUser);
         return this.loggedIn;
       })
     );
@@ -50,8 +50,21 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  decodeUserFromToken(token: string) {
-    return this.jwtHelper.decodeToken(token).user;
+  // getCurrentUser() {
+  //   this.userService.me().pipe(
+  //     map((res) => {
+  //       if (res.disabled === false) {
+  //         this.currentUser = res;
+  //       } else {
+  //         this.loggedIn = false;
+  //         console.log('User is either disabled or does not exists!');
+  //       }
+  //     })
+  //   );
+  // }
+
+  getToken() {
+    return localStorage.getItem('token');
   }
 
   setCurrentUser(decodedUser) {
